@@ -1,0 +1,45 @@
+/*  Ext.ux.RowWithCellSelectionModel
+ *  (c) 2008 Steffen Hiller (http://www.extjswithrails.com)
+ *
+ *  License: Ext.ux.RowWithCellSelectionModel is licensed under the terms of
+ *  the Open Source LGPL 3.0 license.  Commercial use is permitted to the extent
+ *  that the code/component(s) do NOT become part of another Open Source or Commercially
+ *  licensed development library or toolkit without explicit permission.
+ *
+ *  License details: http://www.gnu.org/licenses/lgpl.html
+ *
+ *  This is an extension for the Ext JS Library, for more information see http://www.extjs.com.
+ *--------------------------------------------------------------------------*/
+
+
+Ext.ux.RowWithCellSelectionModel
+================================
+
+This Ext JS extension enables the user to activate the editor of an editable cell in an Ext.grid.EditorGridPanel
+through a double click, to navigate through the cells via the cursor keys and select one or multiple rows through
+the mouse or through the cursor keys, if no cell is currently selected.
+In summary, this selection model is a combination of the two built-in selection models Ext.grid.RowSelectionModel
+and Ext.grid.CellSelectionModel.
+I created it out of the need to be able to add, edit and delete records in an EditorGridPanel. To delete one or
+multiple records, the user needs to select one or multiple rows which is not possible when using the default
+Ext.grid.CellSelectionModel.
+
+
+
+Usage
+=======
+
+new Ext.grid.EditorGridPanel({
+  ds: your_data_store,
+  cm: your_column_model,
+  sm: new Ext.ux.RowWithCellSelectionModel()
+});
+
+
+
+Alternatives
+============
+
+There exists another extension called Ext.ux.grid.RowAction by Jozef Sakalos, aka Saki, which enables you to add
+icons with actions to grid rows. You can't delete multiple records at once, but it's worth a look. See http://rowactions.extjs.eu/
+ 

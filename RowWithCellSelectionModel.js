@@ -32,7 +32,14 @@ Ext.grid.RowWithCellSelectionModel = function(config){
 	     */
 	    "selectionchange",
 	    
-	    "cellup"
+	    "cellup",
+	    
+	    "celldown",
+	    
+	    "cellleft",
+	    
+	    "cellright"
+	    
     );
 
     Ext.grid.RowWithCellSelectionModel.superclass.constructor.call(this);
@@ -42,8 +49,6 @@ Ext.grid.RowWithCellSelectionModel = function(config){
 Ext.extend(Ext.grid.RowWithCellSelectionModel, Ext.grid.RowSelectionModel, {
   
   initEvents : function(){
-      // Ext.grid.RowWithCellSelectionModel.superclass.initEvents.call(this);
-      
       if(!this.grid.enableDragDrop && !this.grid.enableDrag){
           this.grid.on("rowmousedown", this.handleMouseDown, this);
       }else{ // allow click to work like normal
@@ -60,7 +65,6 @@ Ext.extend(Ext.grid.RowWithCellSelectionModel, Ext.grid.RowSelectionModel, {
       
       var view = this.grid.view;
       view.on("rowupdated", this.onRowUpdated, this);
-      // this.grid.on("celldblclick", this.handleMouseDown, this);
       if(this.grid.isEditor){
           this.grid.on("beforeedit", this.beforeEdit,  this);
       }
@@ -83,13 +87,6 @@ Ext.extend(Ext.grid.RowWithCellSelectionModel, Ext.grid.RowSelectionModel, {
     this.clearSelection();
     Ext.grid.RowWithCellSelectionModel.superclass.handleMouseDown.call(this, g, rowIndex, e);
   },
-  
-  // handleMouseDown : function(g, row, cell, e){
-  //     if(e.button !== 0 || this.isLocked()){
-  //         return;
-  //     };
-  //     this.select(row, cell);
-  // },
   
   clearSelection : function(preventNotify){
       var s = this.selection;
@@ -140,14 +137,7 @@ Ext.extend(Ext.grid.RowWithCellSelectionModel, Ext.grid.RowSelectionModel, {
           return;
       }
       var g = this.grid, s = this.selection;
-      // if(!s){
-      //     e.stopEvent();
-      //     var cell = g.walkCells(0, 0, 1, this.isSelectable,  this);
-      //     if(cell){
-      //         this.select(cell[0], cell[1]);
-      //     }
-      //     return;
-      // }
+      
       var sm = this;
       var walk = function(row, col, step){
           return g.walkCells(row, col, step, sm.isSelectable,  sm);
@@ -168,17 +158,19 @@ Ext.extend(Ext.grid.RowWithCellSelectionModel, Ext.grid.RowSelectionModel, {
                  }
              break;
              case e.DOWN:
+                 this.fireEvent("celldown", this, r, c)
                  newCell = walk(r+1, c, 1);
-                 // this.selectNextRow(e);
              break;
              case e.UP:
                  this.fireEvent("cellup", this, r, c)
                  newCell = walk(r-1, c, -1);
              break;
              case e.RIGHT:
+                 this.fireEvent("cellright", this, r, c)
                  newCell = walk(r, c+1, 1);
              break;
              case e.LEFT:
+                 this.fireEvent("cellleft", this, r, c)
                  newCell = walk(r, c-1, -1);
              break;
              case e.ENTER:
@@ -241,7 +233,7 @@ Ext.extend(Ext.grid.RowWithCellSelectionModel, Ext.grid.RowSelectionModel, {
   onEditorKey : function(field, e){
       var k = e.getKey(), newCell, g = this.grid, ed = g.activeEditor;
       var shift = e.shiftKey;
-      if(k == e.TAB || (k == e.RIGHT && field.cursorIsAtEnding()) || (k == e.LEFT && field.cursorIsAtBeginning())){
+      if(k == e.TAB){
           e.stopEvent();
           ed.completeEdit();
           if(shift || k == e.LEFT){
