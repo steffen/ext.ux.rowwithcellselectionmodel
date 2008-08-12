@@ -72,7 +72,8 @@ Ext.extend(Ext.grid.RowWithCellSelectionModel, Ext.grid.RowSelectionModel, {
   
 	//private
   beforeEdit : function(e){
-      this.select(e.row, e.column, false, true, e.record);
+    this.deselectRow(e.row);
+    this.select(e.row, e.column, false, true, e.record);
   },
   
 
